@@ -1,27 +1,40 @@
-server:
-    port: ${PORT:8080}
-
 spring:
     application:
         name: hackaton-gateway
     cloud:
         gateway:
-            discovery:
-                locator:
-                    enabled: true
+            routes:
+                - id: hackaton-clientes-app
+                  uri: lb://hackaton-clientes-app
+                  predicates:
+                      - Path=/api/cliente/**
+                  filters:
+                      - AuthenticationFilter
 
-jwt:
-    secret: 357638792F423F4428472B4B6250655368566D597133743677397A2443264629
+
+                - id: hackaton-cartao-app
+                  uri: lb://hackaton-cartao-app
+                  predicates:
+                      - Path=/api/cartao/**
+                  filters:
+                      - AuthenticationFilter
 
 
-logging:
-  level:
-    org.springframework.security: TRACE
+                - id: hackaton-pagamentos-app
+                  uri: lb://hackaton-pagamentos-app
+                  predicates:
+                      - Path=/api/pagamentos/**
+                  filters:
+                      - AuthenticationFilter
+
+
+                - id: hackaton-autenticacao-app
+                  uri: lb://hackaton-autenticacao-app
+                  predicates:
+                      - Path=/api/autenticacao/**
 
 
 eureka:
     client:
         service-url:
-          defatulZone: ${eureka.client.serviceUrl.defaultZone:http://localhost:8761/eureka}
-        fetch-registry: true
-        register-with-eureka: true
+            defaultZone : http://localhost:8761/eureka/
