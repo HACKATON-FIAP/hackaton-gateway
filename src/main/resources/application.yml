@@ -1,40 +1,57 @@
 spring:
-    application:
-        name: hackaton-gateway
-    cloud:
-        gateway:
-            routes:
-                - id: hackaton-clientes-app
-                  uri: lb://hackaton-clientes-app
-                  predicates:
-                      - Path=/api/cliente/**
-                  filters:
-                      - AuthenticationFilter
+  application:
+    name: hackaton-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: hackaton-clientes-app
+          uri: lb://hackaton-clientes-app
+          predicates:
+            - Path=/api/cliente/**, /hackaton-clientes-app/v3/api-docs, /hackaton-clientes-app/swagger-ui.html
+          filters:
+            - AuthenticationFilter
 
+        - id: hackaton-cartao-app
+          uri: lb://hackaton-cartao-app
+          predicates:
+            - Path=/api/cartao/**, /hackaton-cartao-app/v3/api-docs, /hackaton-cartao-app/swagger-ui.html
+          filters:
+            - AuthenticationFilter
 
-                - id: hackaton-cartao-app
-                  uri: lb://hackaton-cartao-app
-                  predicates:
-                      - Path=/api/cartao/**
-                  filters:
-                      - AuthenticationFilter
+        - id: hackaton-pagamentos-app
+          uri: lb://hackaton-pagamentos-app
+          predicates:
+            - Path=/api/pagamentos/**, /hackaton-pagamentos-app/v3/api-docs, /hackaton-pagamentos-app/swagger-ui.html
+          filters:
+            - AuthenticationFilter
 
+        - id: hackaton-autenticacao-app
+          uri: lb://hackaton-autenticacao-app
+          predicates:
+            - Path=/api/autenticacao/**, /hackaton-autenticacao-app/v3/api-docs, /hackaton-autenticacao-app/swagger-ui.html
 
-                - id: hackaton-pagamentos-app
-                  uri: lb://hackaton-pagamentos-app
-                  predicates:
-                      - Path=/api/pagamentos/**
-                  filters:
-                      - AuthenticationFilter
-
-
-                - id: hackaton-autenticacao-app
-                  uri: lb://hackaton-autenticacao-app
-                  predicates:
-                      - Path=/api/autenticacao/**
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    config-url: /v3/api-docs/swagger-config
+    urls:
+      - url: /v3/api-docs
+        name: API Gateway Service
+      - url: /hackaton-autenticacao-app/v3/api-docs
+        name: Hackaton Autenticação APP Service
+      - url: /hackaton-clientes-app/v3/api-docs
+        name: Hackaton Clientes APP Service
+      - url: /hackaton-cartao-app/v3/api-docs
+        name: Hackaton Cartão APP Service
+      - url: /hackaton-pagamentos-app/v3/api-docs
+        name: Hackaton Pagamentos APP Service
 
 
 eureka:
-    client:
-        service-url:
-            defaultZone : http://localhost:8761/eureka/
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
