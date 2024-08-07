@@ -30,6 +30,12 @@ spring:
           predicates:
             - Path=/api/autenticacao/**, /hackaton-autenticacao-app/v3/api-docs, /hackaton-autenticacao-app/swagger-ui.html
 
+        - id: swagger-docs
+          uri: http://localhost:8080
+          predicates:
+            - Path=/swagger-ui**
+
+
 springdoc:
   api-docs:
     enabled: true
@@ -48,6 +54,15 @@ springdoc:
         name: Hackaton Cartão APP Service
       - url: /hackaton-pagamentos-app/v3/api-docs
         name: Hackaton Pagamentos APP Service
+components:
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+# 2) Apply the security globally to all operations
+security:
+  - bearerAuth: []         # use the same name as above
 
 
 eureka:
